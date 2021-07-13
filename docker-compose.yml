@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  lab:
+    image: ligan_lab
+    environment:
+      # NVIDIA-DOCKER
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      # GOSU
+      - USERNAME=user
+      - LOCAL_UID=1000
+      - LOCAL_GID=1000
+      - LC_CTYPE=en_US.UTF-8
+    command: jupyter lab --ip='*' --port=8889 --NotebookApp.token='' --NotebookApp.password=''
+    ports: [ 8889:8889 ]
+    volumes:
+      - /data:/data
+      - ./lab:/lab
+      - ~/.aws:/home/user/.aws:ro
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - capabilities: [gpu]
